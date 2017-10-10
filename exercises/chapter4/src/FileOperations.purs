@@ -12,3 +12,10 @@ allFiles' :: Path -> Array Path
 allFiles' file = file : do
   child <- ls file
   allFiles' child
+
+evenInteger :: Int -> Boolean
+evenInteger 0 = true
+evenInteger n =
+  not if n < 0
+    then evenInteger $ n + 1
+    else evenInteger $ n - 1
