@@ -3,7 +3,7 @@ module Data.AddressBook where
 import Prelude
 
 import Control.Plus (empty)
-import Data.List (List(..), filter, head, null)
+import Data.List (List(..), filter, head, null, nubBy)
 import Data.Maybe (Maybe)
 
 type Address =
@@ -52,3 +52,9 @@ isPresentWithFilter filterFunc = not <<< null <<< filter filterFunc
 
 isNamePresent :: String -> String -> AddressBook -> Boolean
 isNamePresent firstName lastName = isPresentWithFilter (nameFilter firstName lastName)
+
+isSamePerson :: Entry -> Entry -> Boolean
+isSamePerson entry = nameFilter entry.firstName entry.lastName
+
+removeDuplicates :: AddressBook -> AddressBook
+removeDuplicates = nubBy isSamePerson
