@@ -3,7 +3,7 @@ module FileOperations where
 import Prelude
 
 import Data.Path (Path, ls)
-import Data.Array (concatMap, (:), null)
+import Data.Array (concatMap, filter, (:), null)
 import Data.Array.Partial (head, tail)
 import Partial.Unsafe (unsafePartial)
 
@@ -32,3 +32,11 @@ countEvenInts arr =
     where
       headElem = unsafePartial head arr
       tailArr = unsafePartial tail arr
+
+infixr 9 filter as <$?>
+
+squares :: Array Int -> Array Int
+squares = map \x -> x * x
+
+nonNegatives :: Array Int -> Array Int
+nonNegatives arr = (\x -> if x < 0 then false else true) <$?> arr
