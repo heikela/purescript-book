@@ -1,13 +1,13 @@
 module FileOperations where
 
+import Data.Foldable
 import Prelude
 
-import Data.Path (Path, ls)
+import Control.MonadZero (guard)
 import Data.Array (concatMap, filter, (:), (..), null)
 import Data.Array.Partial (head, tail)
-import Data.Foldable
+import Data.Path (Path, ls)
 import Partial.Unsafe (unsafePartial)
-import Control.MonadZero (guard)
 
 allFiles :: Path -> Array Path
 allFiles root = root : concatMap allFiles (ls root)
@@ -84,3 +84,6 @@ count = count' 0
     count' acc p xs = if p (unsafePartial head xs)
                         then count' (acc + 1) p (unsafePartial tail xs)
                         else count' acc p (unsafePartial tail xs)
+
+reverse :: forall a. Array a -> Array a
+reverse = foldl (\reversedHead next -> next : reversedHead) []
