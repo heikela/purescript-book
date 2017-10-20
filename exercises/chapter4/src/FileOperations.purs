@@ -3,8 +3,9 @@ module FileOperations where
 import Prelude
 
 import Data.Path (Path, ls)
-import Data.Array (concat, concatMap, filter, (:), (..), null)
+import Data.Array (concatMap, filter, (:), (..), null)
 import Data.Array.Partial (head, tail)
+import Data.Foldable
 import Partial.Unsafe (unsafePartial)
 import Control.MonadZero (guard)
 
@@ -71,3 +72,6 @@ factorizations n = do
   guard $ a * b == n
   factorizationsOfB <- factorizations b
   pure $ a : factorizationsOfB
+
+allTrue :: Array Boolean -> Boolean
+allTrue = foldl (&&) true
