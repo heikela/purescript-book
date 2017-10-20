@@ -75,3 +75,12 @@ factorizations n = do
 
 allTrue :: Array Boolean -> Boolean
 allTrue = foldl (&&) true
+
+count :: forall a. (a -> Boolean) -> Array a -> Int
+count = count' 0
+  where
+    count' :: Int -> (a -> Boolean) -> Array a -> Int
+    count' acc _ [] = acc
+    count' acc p xs = if p (unsafePartial head xs)
+                        then count' (acc + 1) p (unsafePartial tail xs)
+                        else count' acc p (unsafePartial tail xs)
