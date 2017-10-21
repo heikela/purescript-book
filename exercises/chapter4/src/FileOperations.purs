@@ -88,4 +88,4 @@ reverse :: forall a. Array a -> Array a
 reverse = foldl (\reversedHead next -> next : reversedHead) []
 
 onlyFiles :: Path -> Array Path
-onlyFiles fromPath = filter (\path -> not isDirectory path) (allFiles fromPath)
+onlyFiles = filter (not isDirectory) <<< allFiles
