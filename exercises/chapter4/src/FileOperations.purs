@@ -1,11 +1,13 @@
 module FileOperations where
 
 import Prelude
-import Data.Foldable (foldl)
+
 import Control.MonadZero (guard)
 import Data.Array (concatMap, filter, (:), (..), null)
 import Data.Array.Partial (head, tail)
-import Data.Path (Path, isDirectory, ls)
+import Data.Foldable (foldl)
+import Data.Maybe (Maybe(Nothing, Just))
+import Data.Path (Path, isDirectory, ls, size)
 import Partial.Unsafe (unsafePartial)
 
 allFiles :: Path -> Array Path
@@ -89,3 +91,14 @@ reverse = foldl (\reversedHead next -> next : reversedHead) []
 
 onlyFiles :: Path -> Array Path
 onlyFiles = filter (not isDirectory) <<< allFiles
+
+largestAndSmallest :: Path -> Maybe {largest:: Path, smallest:: Path}
+largestAndSmallest fromPath =
+  foldl updateLargestAndSmallest Nothing (onlyFiles fromPath)
+    where
+      updateLargestAndSmallest :: Maybe {largest:: Path, smallest:: Path} -> Path -> Maybe {largest:: Path, smallest:: Path}
+      updateLargestAndSmallest Nothing path = Just {largest: path, smallest: path}
+      updateLargestAndSmallest (Just acc) path = Just {
+        largest: (if size path > size acc.largest then path else acc.largest),
+        smallest: (if size path < size acc.smallest then path else acc.smallest)
+      }
