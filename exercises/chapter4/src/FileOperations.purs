@@ -6,7 +6,7 @@ import Prelude
 import Control.MonadZero (guard)
 import Data.Array (concatMap, filter, (:), (..), null)
 import Data.Array.Partial (head, tail)
-import Data.Path (Path, ls)
+import Data.Path (Path, isDirectory, ls)
 import Partial.Unsafe (unsafePartial)
 
 allFiles :: Path -> Array Path
@@ -87,3 +87,6 @@ count = count' 0
 
 reverse :: forall a. Array a -> Array a
 reverse = foldl (\reversedHead next -> next : reversedHead) []
+
+onlyFiles :: Path -> Array Path
+onlyFiles fromPath = filter (\path -> not isDirectory path) (allFiles fromPath)
