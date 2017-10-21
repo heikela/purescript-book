@@ -1,8 +1,7 @@
 module FileOperations where
 
-import Data.Foldable
 import Prelude
-
+import Data.Foldable (foldl)
 import Control.MonadZero (guard)
 import Data.Array (concatMap, filter, (:), (..), null)
 import Data.Array.Partial (head, tail)
