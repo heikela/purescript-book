@@ -4,10 +4,11 @@ import Prelude
 
 import Control.MonadZero (guard)
 import Data.Array (concatMap, filter, (:), (..), null)
+import Data.Array (head) as ArrOpt
 import Data.Array.Partial (head, tail)
 import Data.Foldable (foldl)
 import Data.Maybe (Maybe(Nothing, Just))
-import Data.Path (Path, isDirectory, ls, size)
+import Data.Path (Path, isDirectory, ls, size, root, filename)
 import Partial.Unsafe (unsafePartial)
 
 allFiles :: Path -> Array Path
@@ -102,3 +103,18 @@ largestAndSmallest fromPath =
         largest: (if size path > size acc.largest then path else acc.largest),
         smallest: (if size path < size acc.smallest then path else acc.smallest)
       }
+
+findIn :: Path -> String -> Array Path
+findIn rootPath nameToFind = do
+  subPath <- ls rootPath
+  if not isDirectory subPath
+    then
+      if filename subPath == nameToFind
+        then pure rootPath
+        else []
+    else
+      findIn subPath nameToFind
+
+
+whereIs :: String -> Maybe Path
+whereIs = ArrOpt.head <<< findIn root
