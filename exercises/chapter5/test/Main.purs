@@ -27,3 +27,10 @@ combinations 0 0 = 1
 combinations n 0 = combinations (n - 1) 0
 combinations n k | k == n = combinations (n - 1) (k - 1)
 combinations n k = combinations (n - 1) k + combinations (n - 1) (k - 1)
+
+sameCity {address: {city: c1}} {address: {city: c2}} | c1 == c2 = true
+sameCity _ _ = false
+
+fromSingleton :: forall a. a -> Array a -> a
+fromSingleton _ [x] = x
+fromSingleton a _ = a
