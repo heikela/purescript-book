@@ -17,3 +17,13 @@ picture = [circle, rectangle]
 
 main :: Eff (console :: CONSOLE) Unit
 main = log (showBounds (bounds picture))
+
+factorial :: Int -> Int
+factorial 0 = 1
+factorial n = n * factorial (n - 1)
+
+combinations :: Int -> Int -> Int
+combinations 0 0 = 1
+combinations n 0 = combinations (n - 1) 0
+combinations n k | k == n = combinations (n - 1) (k - 1)
+combinations n k = combinations (n - 1) k + combinations (n - 1) (k - 1)
