@@ -5,6 +5,7 @@ import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Data.Picture (Point(..), Shape(..), Picture, bounds, showBounds)
+import Data.Maybe
 
 circle :: Shape
 circle = Circle (Point { x: 0.0, y: 0.0 }) 10.0
@@ -34,3 +35,16 @@ sameCity _ _ = false
 fromSingleton :: forall a. a -> Array a -> a
 fromSingleton _ [x] = x
 fromSingleton a _ = a
+
+multiply :: Point -> Number -> Point
+multiply (Point {x, y}) multiplier = Point {x: x * multiplier, y: y * multiplier}
+
+doubleSize :: Shape -> Shape
+doubleSize (Circle point size) = Circle (multiply point 2.0) (size * 2.0)
+doubleSize (Rectangle topLeft w h) = Rectangle (multiply topLeft 2.0) (2.0 * w) (2.0 * h)
+doubleSize (Line p1 p2) = Line (multiply p1 2.0) (multiply p2 2.0)
+doubleSize (Text loc txt) = Text (multiply loc 2.0) txt
+
+shapeText :: Shape -> Maybe String
+shapeText (Text _ txt) = Just txt
+shapeText _ = Nothing
