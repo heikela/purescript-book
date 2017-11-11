@@ -15,3 +15,12 @@ main = do
   logShow (hash 'a')
   logShow ("foo" `hashEqual` "foo")
   logShow ("foo" `hashEqual` "bar")
+
+newtype Complex = Complex {
+  real :: Number,
+  imaginary :: Number
+}
+
+instance showComplex :: Show Complex where
+  show (Complex {real, imaginary}) | imaginary >= 0.0 = (show real) <> " + " <> (show imaginary) <> "i"
+  show (Complex {real, imaginary}) = (show real) <> " - " <> (show (-1.0 * imaginary)) <> "i"
