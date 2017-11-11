@@ -24,3 +24,6 @@ newtype Complex = Complex {
 instance showComplex :: Show Complex where
   show (Complex {real, imaginary}) | imaginary >= 0.0 = (show real) <> " + " <> (show imaginary) <> "i"
   show (Complex {real, imaginary}) = (show real) <> " - " <> (show (-1.0 * imaginary)) <> "i"
+
+instance eqComplex :: Eq Complex where
+  eq (Complex {real: r1, imaginary: i1}) (Complex {real: r2, imaginary: i2}) = r1 == r2 && i1 == i2
