@@ -32,3 +32,9 @@ data NonEmpty a = NonEmpty a (Array a)
 
 instance eqNonEmpty :: Eq a => Eq (NonEmpty a) where
   eq (NonEmpty el1 arr1) (NonEmpty el2 arr2) = el1 == el2 && arr1 == arr2
+
+instance semigroupNonEmpty :: Semigroup (NonEmpty a) where
+  append (NonEmpty el rest) (NonEmpty el2 rest2) = (NonEmpty el (rest <> [el2] <> rest2))
+
+instance showNonEmpty :: Show a => Show (NonEmpty a) where
+  show (NonEmpty el arr) = show ([el] <> arr)
