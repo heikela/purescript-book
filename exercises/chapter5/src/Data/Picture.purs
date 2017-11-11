@@ -34,6 +34,9 @@ showShape (Text loc text) =
   "Text [location: " <> showPoint loc <> ", text: " <> show text <> "]"
 showShape (Clipped _ _) = "Clipped picture"
 
+instance showShapeInstance :: Show Shape where
+  show = showShape
+
 type Picture = Array Shape
 
 showPicture :: Picture -> Array String
