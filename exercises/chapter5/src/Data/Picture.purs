@@ -3,7 +3,7 @@ module Data.Picture where
 import Prelude
 
 import Data.Foldable (foldl)
-import Data.Either
+import Data.Either (Either(..))
 import Global as Global
 import Math as Math
 
