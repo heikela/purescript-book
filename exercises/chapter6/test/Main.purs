@@ -30,6 +30,9 @@ instance eqComplex :: Eq Complex where
 
 data NonEmpty a = NonEmpty a (Array a)
 
+ne1 = NonEmpty 0.0 []
+ne2 = NonEmpty 0.0 [1.0, 2.0]
+
 instance eqNonEmpty :: Eq a => Eq (NonEmpty a) where
   eq (NonEmpty el1 arr1) (NonEmpty el2 arr2) = el1 == el2 && arr1 == arr2
 
@@ -41,4 +44,18 @@ instance showNonEmpty :: Show a => Show (NonEmpty a) where
 
 instance functorNonEmpty :: Functor NonEmpty where
   map f (NonEmpty el arr) = (NonEmpty (f el) (map f arr))
-  
+
+data Extended a = Finite a | Infinite
+
+instance showExtended :: Show a => Show (Extended a) where
+  show (Finite a) = show a
+  show Infinite = "infinite"
+
+instance ordExtended :: Ord a => Ord (Extended a) where
+  compare Infinite Infinite = EQ
+  compare Infinite _ = GT
+  compare _ Infinite = LT
+  compare (Finite a) (Finite b) = compare a b
+
+instance eqExtended :: Ord (Extended a) => Eq (Extended a) where
+  eq a b = (compare a b) == EQ
