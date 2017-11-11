@@ -3,6 +3,7 @@ module Data.Picture where
 import Prelude
 
 import Data.Foldable (foldl)
+import Data.Either
 import Global as Global
 import Math as Math
 
@@ -20,6 +21,7 @@ data Shape
   | Rectangle Point Number Number
   | Line Point Point
   | Text Point String
+  | Clipped Picture Bounds
 
 showShape :: Shape -> String
 showShape (Circle c r) =
@@ -30,6 +32,7 @@ showShape (Line start end) =
   "Line [start: " <> showPoint start <> ", end: " <> showPoint end <> "]"
 showShape (Text loc text) =
   "Text [location: " <> showPoint loc <> ", text: " <> show text <> "]"
+showShape (Clipped _ _) = "Clipped picture"
 
 type Picture = Array Shape
 
@@ -76,6 +79,7 @@ shapeBounds (Text (Point { x, y }) _) = Bounds
   , bottom: y
   , right:  x
   }
+shapeBounds (Clipped pic clipBounds) = intersect (bounds pic) clipBounds
 
 union :: Bounds -> Bounds -> Bounds
 union (Bounds b1) (Bounds b2) = Bounds
@@ -115,8 +119,9 @@ bounds = foldl combine emptyBounds
   combine :: Bounds -> Shape -> Bounds
   combine b shape = union (shapeBounds shape) b
 
-area :: Shape -> Number
-area (Circle _ r) = Math.pi * r * r
-area (Line _ _) = 0.0
-area (Text _ _) = 0.0
-area (Rectangle _ w h) = w * h
+area :: Shape -> Either String Number
+area (Circle _ r) = Right $ Math.pi * r * r
+area (Line _ _) = Right 0.0
+area (Text _ _) = Right 0.0
+area (Rectangle _ w h) = Right $ w * h
+area (Clipped _ _) = Left "Computing the area of a clipped picture not implemented"

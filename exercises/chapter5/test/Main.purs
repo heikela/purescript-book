@@ -4,7 +4,7 @@ import Prelude
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
-import Data.Picture (Point(..), Shape(..), Picture, bounds, showBounds)
+import Data.Picture (Point(..), Shape(..), Picture, Bounds(..), bounds, showBounds)
 import Data.Maybe
 
 circle :: Shape
@@ -39,11 +39,21 @@ fromSingleton a _ = a
 multiply :: Point -> Number -> Point
 multiply (Point {x, y}) multiplier = Point {x: x * multiplier, y: y * multiplier}
 
+scaleBounds :: Bounds -> Number -> Bounds
+scaleBounds (Bounds {top, left, bottom, right}) mul = Bounds
+  {
+    top: top * mul,
+    left: left * mul,
+    bottom: bottom * mul,
+    right: right * mul
+  }
+
 doubleSize :: Shape -> Shape
 doubleSize (Circle point size) = Circle (multiply point 2.0) (size * 2.0)
 doubleSize (Rectangle topLeft w h) = Rectangle (multiply topLeft 2.0) (2.0 * w) (2.0 * h)
 doubleSize (Line p1 p2) = Line (multiply p1 2.0) (multiply p2 2.0)
 doubleSize (Text loc txt) = Text (multiply loc 2.0) txt
+doubleSize (Clipped picture bounds) = Clipped (map doubleSize picture) (scaleBounds bounds 2.0)
 
 shapeText :: Shape -> Maybe String
 shapeText (Text _ txt) = Just txt
