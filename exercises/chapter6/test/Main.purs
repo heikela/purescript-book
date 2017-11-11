@@ -27,3 +27,8 @@ instance showComplex :: Show Complex where
 
 instance eqComplex :: Eq Complex where
   eq (Complex {real: r1, imaginary: i1}) (Complex {real: r2, imaginary: i2}) = r1 == r2 && i1 == i2
+
+data NonEmpty a = NonEmpty a (Array a)
+
+instance eqNonEmpty :: Eq a => Eq (NonEmpty a) where
+  eq (NonEmpty el1 arr1) (NonEmpty el2 arr2) = el1 == el2 && arr1 == arr2
