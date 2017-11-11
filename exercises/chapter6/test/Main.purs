@@ -38,3 +38,7 @@ instance semigroupNonEmpty :: Semigroup (NonEmpty a) where
 
 instance showNonEmpty :: Show a => Show (NonEmpty a) where
   show (NonEmpty el arr) = show ([el] <> arr)
+
+instance functorNonEmpty :: Functor NonEmpty where
+  map f (NonEmpty el arr) = (NonEmpty (f el) (map f arr))
+  
