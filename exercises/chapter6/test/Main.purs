@@ -1,5 +1,6 @@
 module Test.Main where
 
+import Data.Foldable
 import Prelude
 
 import Control.Monad.Eff (Eff)
@@ -44,6 +45,11 @@ instance showNonEmpty :: Show a => Show (NonEmpty a) where
 
 instance functorNonEmpty :: Functor NonEmpty where
   map f (NonEmpty el arr) = (NonEmpty (f el) (map f arr))
+
+instance foldableNonEmpty :: Foldable NonEmpty where
+  foldr f b (NonEmpty el arr) = f el (foldr f b arr)
+  foldl f b (NonEmpty el arr) = foldl f (f b el) arr
+  foldMap f (NonEmpty el arr) = (f el) <> (foldMap f arr)
 
 data Extended a = Finite a | Infinite
 
