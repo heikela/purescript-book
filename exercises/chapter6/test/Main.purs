@@ -51,6 +51,13 @@ instance foldableNonEmpty :: Foldable NonEmpty where
   foldl f b (NonEmpty el arr) = foldl f (f b el) arr
   foldMap f (NonEmpty el arr) = (f el) <> (foldMap f arr)
 
+data OneMore f a = OneMore a (f a)
+
+instance foldableOneMore :: Foldable f => Foldable (OneMore f) where
+  foldr f b (OneMore x xs) = f x (foldr f b xs)
+  foldl f b (OneMore x xs) = foldl f (f b x) xs
+  foldMap f (OneMore x xs) = (f x) <> (foldMap f xs)
+
 data Extended a = Finite a | Infinite
 
 instance showExtended :: Show a => Show (Extended a) where
