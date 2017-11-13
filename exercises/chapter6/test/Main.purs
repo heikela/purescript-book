@@ -6,6 +6,8 @@ import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, logShow)
 import Data.Hashable (hash, hashEqual)
+import Data.Maybe (Maybe(..))
+import Data.Array
 
 main :: Eff (console :: CONSOLE) Unit
 main = do
@@ -72,3 +74,9 @@ instance ordExtended :: Ord a => Ord (Extended a) where
 
 instance eqExtended :: Ord (Extended a) => Eq (Extended a) where
   eq a b = (compare a b) == EQ
+
+getFromMaybe :: forall a. Partial => Maybe a -> a
+getFromMaybe (Just val) = val
+
+partialMax :: forall a. Ord a => Partial => Array a -> a
+partialMax = maximum >>> getFromMaybe
